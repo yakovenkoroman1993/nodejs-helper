@@ -23,12 +23,5 @@ IF NOT "%~1"=="" (
   GOTO :loop
 )
 
-echo -c %COMMAND% -v %VERSION% -p %PORTS%
-rem sh nodejs.sh -c %COMMAND% -v %VERSION% -p %PORTS%
-
-docker run --rm ^
-    --name nodejs-helper ^
-    -p %PORTS% ^
-    --mount type=bind,source=%cd%,target=//app ^
-    -w //app node:%VERSION% ^
-    bash -c %COMMAND%
+rem echo -c %COMMAND% -v %VERSION% -p %PORTS%
+sh nodejs.sh -c %COMMAND% -v %VERSION% -p %PORTS%
