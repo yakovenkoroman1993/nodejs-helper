@@ -1,6 +1,6 @@
 # nodejs-helper
 
-Note! It needs, to add nodejs in common environment and to install docker engine.
+Note! It needs to add nodejs in common environment. Also, install docker engine and git (for windows) is required.
 
 ```sh
 nodejs 
