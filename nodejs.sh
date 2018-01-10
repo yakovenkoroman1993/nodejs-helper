@@ -2,9 +2,9 @@
 
 VERSION="latest"
 COMMAND="node -v"
-PORTS="3001:3001"
+PORTS="3000:3000"
 
-# args parser
+# arguments parser
 POSITIONAL=()
 while [[ $# -gt 0 ]]
 do
@@ -33,12 +33,34 @@ do
 done
 set -- "${POSITIONAL[@]}" # restore positional parameters
 
-# node running
-name="node-$(date +%N | sha256sum | base64 | head -c 12)"
+# node building
+IMAGE_NAME="nodejs-helper-image-${VERSION}"
+if ! docker images --format "{{.Repository}}" | grep -q "${IMAGE_NAME}" ; then
 
+    FILE_NAME="Dockerfile.tmp"
+    EXPOSE_PORT="${PORTS##*:}"
+
+    cat <<EOF > ${FILE_NAME}
+FROM node:${VERSION}
+EXPOSE ${EXPOSE_PORT}
+CMD ['node', '-v']
+EOF
+    echo "building $IMAGE_NAME"
+
+    docker build \
+        -f ${FILE_NAME} \
+        -t ${IMAGE_NAME} .
+
+    rm -rf ${FILE_NAME}
+fi
+
+# node running
+HASH=$(date +%N | sha256sum | base64 | head -c 12)
+CONTAINER_NAME="node-${HASH}"
 docker run --rm \
-    --name "${name}" \
+    --name "${CONTAINER_NAME}" \
     -p ${PORTS} \
     --mount type=bind,source=$(pwd),target=//app \
-    -w //app node:${VERSION} \
+    -w //app \
+    ${IMAGE_NAME} \
     bash -c "${COMMAND}"
