@@ -1,6 +1,6 @@
 # nodejs-helper
 
-Note! It needs, to add nodejs in common envirioment.
+Note! It needs, to add nodejs in common environment and to install docker engine.
 
 ```sh
 nodejs 
@@ -11,4 +11,5 @@ nodejs -v 6
 
 nodejs -v 6 -c "cd /app; npm i && npm start"
 nodejs -v 8 -c "cd /app; npm i && npm start"
+nodejs -v 8 -c "cd /app; npm i && npm start" -p "80:3000"
 ```
